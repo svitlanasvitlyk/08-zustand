@@ -1,3 +1,4 @@
+
 import {
   QueryClient,
   HydrationBoundary,
@@ -15,35 +16,23 @@ export async function generateMetadata({
   params,
 }: SlugProps): Promise<Metadata> {
   const { slug } = await params;
-  const slugPath = slug.join("/");
+  const tag = slug[0];
+
   return {
-    title: `${slug[0]} notes`,
-    description: `Notes filtered by tag "${slug[0]}"`,
-    openGraph: {
-      title: `${slug[0]} notes`,
-      description: `Notes filtered by tag "${slug[0]}"`,
-      url: `https://07-routing-nextjs-rust-nu.vercel.app/notes/filter/${slugPath}`,
-      images: [
-        {
-          url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
-          width: 1200,
-          height: 630,
-          alt: "Filtered Notes",
-        },
-      ],
-    },
+    title: `${tag} notes`,
+    description: `Notes filtered by tag "${tag}"`,
   };
 }
 
 const NotesPage = async ({ params }: SlugProps) => {
   const queryClient = new QueryClient();
-
   const { slug } = await params;
-  const category = slug[0] === "all" ? undefined : slug[0];
+
+  const tag = slug[0] === "all" ? undefined : slug[0];
 
   await queryClient.prefetchQuery({
-    queryKey: ["notes", slug[0]],
-    queryFn: () => fetchNotes(undefined, undefined, category),
+    queryKey: ["notes", tag],
+    queryFn: () => fetchNotes("", 1, tag),
   });
 
   return (

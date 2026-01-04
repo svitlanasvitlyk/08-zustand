@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Note, NotePost, NoteTag } from '../types/note';
+import type { Note, NoteMin } from "@/types/note.ts";
 
 export type NoteId = Note['id'];
 
@@ -56,7 +56,7 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
   return response.data;
 };
 
-export const createNote = async (note: NotePost): Promise<Note> => {
+export const createNote = async (note: NoteMin): Promise<Note> => {
   const response = await axios.post<Note>(
     'https://notehub-public.goit.study/api/notes',
     note,
